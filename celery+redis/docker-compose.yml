@@ -1,0 +1,21 @@
+version: '2.4'
+
+services:
+  worker:
+    build:
+      context: .
+    depends_on:
+      - redis
+    command: ["celery",
+              "-A",
+              "celery_example",
+              "worker",
+              "--loglevel=info"]
+    environment:
+      - C_FORCE_ROOT=true
+    network_mode: "host"
+
+  redis:
+    image: redis:6.2.3-buster
+    ports:
+    - 6379:6379

@@ -1,0 +1,21 @@
+version: '2.4'
+
+services:
+  scheduler: # similar to devdask in dockerhub
+    build:
+      context: .
+    ports:
+    - 8786:8786
+    command: ["dask-scheduler"]
+
+  worker:
+    build:
+      context: .
+    depends_on:
+      - scheduler
+    command: ["dask-worker",
+              "tcp://scheduler:8786",
+              "--nprocs",
+              "8",
+              "--resources",
+              "CPU_COUNT=8"]
